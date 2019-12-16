@@ -16,21 +16,25 @@ $locations = Import-Csv -Path $inputFile -Header "location"
 $url = "https://maps.googleapis.com/maps/api/geocode/json?"
 
 # arraylist for storing response
-$response = New-Object System.Collections.ArrayList
+$locData = New-Object System.Collections.ArrayList
 foreach ($loc in $locations) {
     # build the query parameters
     $params = @{ address = $loc ; key = $APIKEY }
 
     # send API request
-    $r = Invoke-WebRequest $url -Method Get -Body $params -UseBasicParsing | ConvertFrom-Json | Select results
+    $response = Invoke-WebRequest $url -Method Get -Body $params -UseBasicParsing | ConvertFrom-Json
+
+    if ($response.status -ne "OK") {
+        $response.error_message
+    }
 
     $detailsObject = [PSCustomObject]@{
         location = $loc.location
-        lat      = $r.results.geometry.location.lat
-        lng      = $r.results.geometry.location.lng
+        lat      = $response.results.geometry.location.lat
+        lng      = $response.results.geometry.location.lng
     }
 
-    $response.Add($detailsObject) | Out-Null
+    $locData.Add($detailsObject) | Out-Null
 }
 
-$response | Export-Csv -Path "lat-long.csv" -NoTypeInformation
+$locData | Export-Csv -Path "lat-long.csv" -NoTypeInformation

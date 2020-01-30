@@ -12,6 +12,16 @@ Input is provided as a CSV containing the location information. The locations.cs
 
 Use the `-inputFile` flag to provide the input file.
 
-```Powershell
+```PowerShell
 .\geocode.ps1 -inputFile "locations.csv"
+```
+
+## Create-Points
+
+The create-points scripts uses the Geocoding API to automate the creation of WorldMap points in the Orion Web Console. It uses the `City` node custom property to obtain the latitude and longitude coordinates for the node's location. An `Orion.WorldMap.Point` object is then created from these coordinates via the Orion API.
+
+Use the following command to run the script.
+
+```PowerShell
+.\create-points.ps1
 ```

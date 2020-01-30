@@ -7,6 +7,7 @@ $APIKEY = "thisIsMyAPIKEY"
 # Verify that the API key is not empty
 if ($APIKEY -eq $null -or $APIKEY -eq "") {
     Write-Output "Please provide an API key."
+    Exit
 }
 
 # Read input csv
@@ -29,6 +30,7 @@ foreach ($loc in $locations) {
     # check response status
     if ($response.status -ne "OK") {
         $response.error_message
+        Exit
     }
 
     # build a detailsObject
